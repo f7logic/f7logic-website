@@ -38,9 +38,6 @@ export default function NebulaStage() {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f0e3d5] border border-[#e3c8aa] text-[#6b4f39] text-sm font-medium mb-4 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-[#8f5d3b]" /> STAGE 02 // DENSE NEURAL INTELLIGENCE
-          </div>
           <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-950">
             Our Services
           </h2>
@@ -123,12 +120,6 @@ export default function NebulaStage() {
 
         {/* Predictive & Core Platform */}
         <div className="mt-16">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#f0e5d8] border border-[#e1c4a3] text-[#775a3d] text-sm font-medium shadow-sm">
-              STAGE 02 // PREDICTIVE & CORE PLATFORM
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 25 }}

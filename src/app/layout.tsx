@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   title: "F7 Logic — Full-Spectrum AI & Software Engineering",
   description: "Custom Computer Vision, LLMs, Autonomous Agents, and Enterprise Software Development.",
   icons: {
-    icon: [{ url: "/logo.png", type: "image/png" }],
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 };
 
