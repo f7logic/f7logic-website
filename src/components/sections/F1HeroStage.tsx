@@ -11,18 +11,18 @@ export default function F1HeroStage() {
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-[#f5f1ea] text-zinc-900" style={{ perspective: 1600 }}>
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 -z-10">
         <video
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          className="h-full w-full object-cover opacity-55 grayscale contrast-[1.1] brightness-[0.8]"
+          className="h-full w-full object-cover opacity-65 grayscale contrast-[1.15] brightness-[0.78]"
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(255,255,255,0.25),_rgba(245,241,234,0.82)_42%,_rgba(245,241,234,1)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(255,255,255,0.35),_rgba(245,241,234,0.72)_38%,_rgba(245,241,234,0.95)_100%)]" />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center px-6 pb-16 pt-28 lg:px-10 lg:pt-20">
@@ -74,7 +74,7 @@ export default function F1HeroStage() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="relative min-h-[420px] w-full"
           >
-            <div className="absolute inset-0 rounded-[2rem] border border-zinc-300/70 bg-white/25 backdrop-blur-[2px]" />
+            <div className="absolute inset-0 rounded-[2rem] border border-zinc-300/70 bg-white/20 backdrop-blur-[2px]" />
             <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
               <video
                 autoPlay
@@ -82,13 +82,13 @@ export default function F1HeroStage() {
                 muted
                 playsInline
                 preload="auto"
-                className="h-full w-full object-cover opacity-90 grayscale contrast-[1.1] brightness-[0.7]"
+                className="h-full w-full object-cover opacity-95 grayscale contrast-[1.1] brightness-[0.72]"
               >
                 <source src="/hero-video.mp4" type="video/mp4" />
               </video>
             </div>
 
-            <div className="absolute inset-5 rounded-[1.5rem] border border-zinc-300/70 bg-white/15" />
+            <div className="absolute inset-4 rounded-[1.5rem] border border-zinc-300/70 bg-white/10" />
 
             <div className="absolute -top-8 left-5 right-5 z-20 rounded-full border border-zinc-300/70 bg-white/75 px-4 py-2 text-center text-sm font-medium text-zinc-700 backdrop-blur-md shadow-[0_12px_24px_rgba(15,23,42,0.08)]">
               AI • Data Solutions • Software Development
@@ -114,10 +114,9 @@ export default function F1HeroStage() {
 
       <div
         onClick={() => scrollTo("nebula-stage")}
-        className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-700"
+        className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 cursor-pointer flex-col items-center text-zinc-700"
       >
-        <span>Scroll to Dense Neurons</span>
-        <ChevronDown className="h-4 w-4 text-orange-500" />
+        <ChevronDown className="h-5 w-5 text-orange-500" />
       </div>
     </section>
   );

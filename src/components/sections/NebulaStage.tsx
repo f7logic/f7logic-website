@@ -154,13 +154,11 @@ export default function NebulaStage() {
           </div>
         </div>
 
-        {/* Scroll Indicator to Stage 3 */}
         <div 
           onClick={() => scrollTo("neurons-stage")}
-          className="flex flex-col items-center gap-2 text-xs font-mono text-zinc-500 cursor-pointer pt-16 animate-bounce"
+          className="flex items-center justify-center pt-16 cursor-pointer animate-bounce"
         >
-          <span>SCROLL TO STAGE 3 // ARCHITECTURE & DEPLOYMENT</span>
-          <ChevronDown className="w-4 h-4 text-orange-600" />
+          <ChevronDown className="w-5 h-5 text-orange-600" />
         </div>
 
       </div>
