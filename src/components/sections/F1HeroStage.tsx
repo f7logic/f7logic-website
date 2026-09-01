@@ -11,14 +11,14 @@ export default function F1HeroStage() {
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-[#f5f1ea] text-zinc-900" style={{ perspective: 1600 }}>
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
         <video
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          className="h-full w-full object-cover opacity-65 grayscale contrast-[1.15] brightness-[0.78]"
+          className="h-full min-h-screen w-full scale-105 object-cover object-center opacity-65 grayscale contrast-[1.15] brightness-[0.78]"
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
@@ -75,14 +75,14 @@ export default function F1HeroStage() {
             className="relative min-h-[420px] w-full"
           >
             <div className="absolute inset-0 rounded-[2rem] border border-zinc-300/70 bg-white/20 backdrop-blur-[2px]" />
-            <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
               <video
                 autoPlay
                 loop
                 muted
                 playsInline
                 preload="auto"
-                className="h-full w-full object-cover opacity-95 grayscale contrast-[1.1] brightness-[0.72]"
+                className="h-full min-h-full w-full scale-110 object-cover object-center opacity-95 grayscale contrast-[1.1] brightness-[0.72]"
               >
                 <source src="/hero-video.mp4" type="video/mp4" />
               </video>
