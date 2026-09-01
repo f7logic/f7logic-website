@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   const scrollTo = (id: string) => {
@@ -11,48 +12,41 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-12 px-6 relative z-10">
-      <div className="max-w-7xl mx-auto rounded-2xl bg-black/85 border border-purple-300/30 p-8 sm:p-10 backdrop-blur-2xl shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
-        
-        {/* Logo & Slogan */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-          <div className="relative h-9 w-48 flex items-center">
-            <Image
-              src="/logo.png" 
-              alt="F7 Logic Logo"
-              fill
-              sizes="192px"
-              loading="eager"
-              className="object-contain object-center sm:object-left"
-            />
+    <footer className="relative z-10 px-4 pb-8 pt-6 sm:px-8">
+      <div className="mx-auto max-w-7xl rounded-[1.6rem] border border-purple-300/20 bg-[#0e0a16]/90 px-5 py-5 shadow-[0_18px_50px_rgba(9,12,18,0.5)] backdrop-blur-2xl sm:px-8">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex items-center justify-center md:justify-start">
+            <div className="relative h-9 w-40 sm:w-48">
+              <Image
+                src="/logo.png"
+                alt="F7 Logic Logo"
+                fill
+                sizes="(min-width: 640px) 192px, 160px"
+                loading="eager"
+                className="object-contain object-center"
+              />
+            </div>
           </div>
-          <span className="hidden sm:inline-block text-purple-300/40">|</span>
-          <p className="text-purple-200/70 text-xs sm:text-sm font-medium">
-            Full-Spectrum AI & Software Engineering
+
+          <nav className="flex flex-wrap items-center justify-center gap-4 text-[11px] font-bold tracking-[0.18em] text-purple-100/80 sm:gap-6 sm:text-xs">
+            <button onClick={() => scrollTo("nebula-stage")} className="transition-colors hover:text-orange-400 cursor-pointer">
+              Services
+            </button>
+            <button onClick={() => scrollTo("metrics")} className="transition-colors hover:text-orange-400 cursor-pointer">
+              Projects
+            </button>
+            <Link href="/career" className="transition-colors hover:text-orange-400 cursor-pointer">
+              Career
+            </Link>
+            <button onClick={() => scrollTo("contact")} className="transition-colors hover:text-orange-400 cursor-pointer">
+              Contact
+            </button>
+          </nav>
+
+          <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-purple-300/60">
+            © {new Date().getFullYear()} F7 Logic
           </p>
         </div>
-
-        {/* Links */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm font-bold text-purple-200/80">
-          <button onClick={() => scrollTo("domains")} className="hover:text-amber-300 transition-colors cursor-pointer">
-            AI Domains
-          </button>
-          <button onClick={() => scrollTo("metrics")} className="hover:text-amber-300 transition-colors cursor-pointer">
-            Performance
-          </button>
-          <button onClick={() => scrollTo("process")} className="hover:text-amber-300 transition-colors cursor-pointer">
-            Engineering Process
-          </button>
-          <button onClick={() => scrollTo("contact")} className="hover:text-amber-300 transition-colors cursor-pointer">
-            Contact
-          </button>
-        </div>
-
-        {/* Copyright */}
-        <p className="text-purple-300/60 text-xs font-mono">
-          © {new Date().getFullYear()} F7 Logic. All rights reserved.
-        </p>
-
       </div>
     </footer>
   );
