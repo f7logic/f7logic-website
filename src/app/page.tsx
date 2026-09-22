@@ -14,7 +14,7 @@ export default function Home() {
         {/* STAGE 2: White Background + 3D Colorful Nebula */}
         <NebulaStage />
 
-        {/* STAGE 3: Electric Orange Canvas + 4K AI Neurons & Contact Form */}
+        {/* STAGE 3: AI consultation and contact form */}
         <NeuronsStage />
       </div>
     </>

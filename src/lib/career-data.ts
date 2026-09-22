@@ -24,6 +24,18 @@ export type Application = {
   createdAt: string;
 };
 
+export type Certification = {
+  id: string;
+  issuer: string;
+  title: string;
+  detail: string;
+  issuedAt: string;
+  credentialUrl: string;
+  fileData: string;
+  fileName: string;
+  fileType: string;
+};
+
 const fallbackJobs: Job[] = [
   {
     id: "job-1",
@@ -97,6 +109,20 @@ const fallbackJobs: Job[] = [
 ];
 
 const fallbackApplications: Application[] = [];
+
+const fallbackCertifications: Certification[] = [
+  {
+    id: "cert-1",
+    issuer: "Microsoft",
+    title: "Microsoft Certified: Power BI Data Analyst Associate",
+    detail: "Exam: PL-300",
+    issuedAt: "",
+    credentialUrl: "",
+    fileData: "",
+    fileName: "",
+    fileType: "",
+  },
+];
 
 type JobInput = {
   title: string;
@@ -187,6 +213,21 @@ const ensureSchema = async () => {
       );
     `;
 
+    await sql`
+      CREATE TABLE IF NOT EXISTS certifications (
+        id SERIAL PRIMARY KEY,
+        issuer TEXT NOT NULL,
+        title TEXT NOT NULL,
+        detail TEXT NOT NULL DEFAULT '',
+        issued_at DATE,
+        credential_url TEXT NOT NULL DEFAULT '',
+        file_data TEXT NOT NULL DEFAULT '',
+        file_name TEXT NOT NULL DEFAULT '',
+        file_type TEXT NOT NULL DEFAULT '',
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `;
+
     await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_name TEXT NOT NULL DEFAULT 'resume'`;
     await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_type TEXT NOT NULL DEFAULT 'application/octet-stream'`;
 
@@ -208,6 +249,77 @@ const mapJobRow = (row: Record<string, unknown>): Job => ({
   responsibilities: Array.isArray(row.responsibilities) ? row.responsibilities.map(String) : [],
   requirements: Array.isArray(row.requirements) ? row.requirements.map(String) : [],
 });
+
+const mapCertificationRow = (row: Record<string, unknown>): Certification => ({
+  id: String(row.id ?? ""),
+  issuer: String(row.issuer ?? ""),
+  title: String(row.title ?? ""),
+  detail: String(row.detail ?? ""),
+  issuedAt: row.issued_at ? String(row.issued_at).slice(0, 10) : "",
+  credentialUrl: String(row.credential_url ?? ""),
+  fileData: String(row.file_data ?? ""),
+  fileName: String(row.file_name ?? ""),
+  fileType: String(row.file_type ?? ""),
+});
+
+export type CertificationInput = Omit<Certification, "id">;
+
+export async function getCertifications(): Promise<Certification[]> {
+  const sql = await ensureSchema();
+
+  if (!sql) return fallbackCertifications;
+
+  try {
+    const rows = await sql`SELECT * FROM certifications ORDER BY created_at DESC`;
+    return rows.map(mapCertificationRow);
+  } catch {
+    return fallbackCertifications;
+  }
+}
+
+export async function createCertification(input: CertificationInput) {
+  const next: Certification = {
+    id: `cert-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    ...input,
+  };
+  const sql = await ensureSchema();
+
+  if (!sql) {
+    fallbackCertifications.unshift(next);
+    return next;
+  }
+
+  try {
+    const rows = await sql`
+      INSERT INTO certifications (issuer, title, detail, issued_at, credential_url, file_data, file_name, file_type)
+      VALUES (${input.issuer}, ${input.title}, ${input.detail}, ${input.issuedAt || null}, ${input.credentialUrl}, ${input.fileData}, ${input.fileName}, ${input.fileType})
+      RETURNING *;
+    `;
+
+    return rows.length > 0 ? mapCertificationRow(rows[0]) : next;
+  } catch {
+    fallbackCertifications.unshift(next);
+    return next;
+  }
+}
+
+export async function deleteCertification(id: string) {
+  const sql = await ensureSchema();
+
+  if (!sql) {
+    const index = fallbackCertifications.findIndex((certification) => certification.id === id);
+    if (index === -1) return false;
+    fallbackCertifications.splice(index, 1);
+    return true;
+  }
+
+  try {
+    const rows = await sql`DELETE FROM certifications WHERE id = ${id} RETURNING id`;
+    return rows.length > 0;
+  } catch {
+    return false;
+  }
+}
 
 export async function getJobs(): Promise<Job[]> {
   const sql = await ensureSchema();

@@ -69,7 +69,7 @@ export default function NeuronsStage() {
         transition={{ duration: 0.7, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
         style={{ transformPerspective: 1800, transformOrigin: "50% 0%" }}
       />
-      <div id="process" className="max-w-6xl mx-auto relative z-10 scroll-mt-24">
+      <div id="contact-stage" className="max-w-6xl mx-auto relative z-10 scroll-mt-24">
         {/* Contact Form Container on the Orange Canvas */}
         <div id="contact" className="max-w-4xl mx-auto rounded-3xl border border-[#eadcc7] bg-white/75 p-8 sm:p-14 backdrop-blur-2xl shadow-[0_28px_80px_rgba(76,52,33,0.08)]">
           <div className="text-center max-w-xl mx-auto mb-10">

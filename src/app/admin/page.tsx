@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createJob, deleteJob, getJobs, type Job } from "@/lib/career-data";
+import { createCertification, createJob, deleteCertification, deleteJob, getCertifications, getJobs, type Certification, type Job } from "@/lib/career-data";
 
 const ADMIN_COOKIE = "f7_admin_session";
 
@@ -81,15 +81,60 @@ async function deleteJobAction(formData: FormData) {
   redirect("/admin?deleted=1");
 }
 
+async function createCertificationAction(formData: FormData) {
+  "use server";
+
+  const cookieStore = await cookies();
+  if (cookieStore.get(ADMIN_COOKIE)?.value !== "true") redirect("/admin");
+
+  const file = formData.get("file");
+  let fileData = "";
+  let fileName = "";
+  let fileType = "";
+
+  if (file instanceof File && file.size > 0) {
+    const allowedTypes = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type) || file.size > 5 * 1024 * 1024) redirect("/admin?error=invalid-file");
+    fileData = `data:${file.type};base64,${Buffer.from(await file.arrayBuffer()).toString("base64")}`;
+    fileName = file.name;
+    fileType = file.type;
+  }
+
+  const input = {
+    issuer: String(formData.get("issuer") || ""),
+    title: String(formData.get("certificationTitle") || ""),
+    detail: String(formData.get("detail") || ""),
+    issuedAt: String(formData.get("issuedAt") || ""),
+    credentialUrl: String(formData.get("credentialUrl") || ""),
+    fileData,
+    fileName,
+    fileType,
+  };
+
+  if (!input.issuer || !input.title || !input.detail) redirect("/admin?error=missing-certification-fields");
+  await createCertification(input);
+  redirect("/admin?certification-created=1");
+}
+
+async function deleteCertificationAction(formData: FormData) {
+  "use server";
+  const cookieStore = await cookies();
+  if (cookieStore.get(ADMIN_COOKIE)?.value !== "true") redirect("/admin");
+  const id = String(formData.get("id") || "");
+  if (id) await deleteCertification(id);
+  redirect("/admin?certification-deleted=1");
+}
+
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ error?: string; created?: string; updated?: string; deleted?: string }>;
+  searchParams?: Promise<{ error?: string; created?: string; updated?: string; deleted?: string; "certification-created"?: string; "certification-deleted"?: string }>;
 }) {
   const params = searchParams ? await searchParams : {};
   const cookieStore = await cookies();
   const authenticated = cookieStore.get(ADMIN_COOKIE)?.value === "true";
   const jobs: Job[] = await getJobs();
+  const certifications: Certification[] = await getCertifications();
 
   return (
     <main className="min-h-screen bg-[#050b12] px-6 py-24 text-white">
@@ -115,6 +160,11 @@ export default async function AdminPage({
             Please complete all required fields before creating the role.
           </div>
         )}
+
+        {params.error === "missing-certification-fields" && <div className="mb-6 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-200">Please complete the certification title, issuer, and detail.</div>}
+        {params.error === "invalid-file" && <div className="mb-6 rounded-2xl border border-rose-500/40 bg-rose-500/10 p-4 text-sm text-rose-200">Upload a PDF, JPG, PNG, or WebP file up to 5 MB.</div>}
+        {params["certification-created"] === "1" && <div className="mb-6 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-200">Certification published successfully.</div>}
+        {params["certification-deleted"] === "1" && <div className="mb-6 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-200">Certification deleted successfully.</div>}
 
         {params.created === "1" && (
           <div className="mb-6 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-200">
@@ -252,6 +302,22 @@ export default async function AdminPage({
                 ))}
               </div>
             </aside>
+
+            <section className="rounded-[2rem] border border-slate-700 bg-slate-900/80 p-8 shadow-2xl shadow-slate-950/30 xl:col-span-2">
+              <h2 className="text-2xl font-bold">Publish certification</h2>
+              <form action={createCertificationAction} encType="multipart/form-data" className="mt-6 grid gap-5 md:grid-cols-2">
+                <input name="issuer" required placeholder="Issuer, e.g. Microsoft" className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-sky-400" />
+                <input name="certificationTitle" required placeholder="Certification title" className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-sky-400" />
+                <input name="detail" required placeholder="Detail, e.g. Exam: PL-300" className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-sky-400" />
+                <input name="issuedAt" type="date" className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-sky-400" />
+                <input name="credentialUrl" type="url" placeholder="Verification URL (optional)" className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-sky-400" />
+                <input name="file" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-3 file:py-2 file:text-xs file:font-semibold file:text-black" />
+                <button type="submit" className="rounded-full bg-white px-6 py-3 font-bold text-black hover:bg-slate-200 md:col-span-2">Publish certification</button>
+              </form>
+              <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {certifications.map((certification) => <div key={certification.id} className="rounded-2xl border border-slate-700 bg-slate-950/70 p-4"><p className="text-xs uppercase tracking-[0.2em] text-sky-300">{certification.issuer}</p><h3 className="mt-2 font-bold text-white">{certification.title}</h3><p className="mt-2 text-sm text-slate-400">{certification.detail}</p><form action={deleteCertificationAction} className="mt-4"><input type="hidden" name="id" value={certification.id} /><button type="submit" className="rounded-full border border-rose-400/50 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:bg-rose-400/10">Delete</button></form></div>)}
+              </div>
+            </section>
           </div>
         )}
       </div>
