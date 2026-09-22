@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, ChevronDown, Gauge, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, ChevronDown, Gauge } from "lucide-react";
 
 export default function F1HeroStage() {
   const scrollTo = (id: string) => {
@@ -12,26 +13,16 @@ export default function F1HeroStage() {
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-[#f5f1ea] text-zinc-900" style={{ perspective: 1600 }}>
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          className="h-full min-h-screen w-full scale-105 object-cover object-center opacity-65 grayscale contrast-[1.15] brightness-[0.78]"
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,_rgba(255,255,255,0.35),_rgba(245,241,234,0.72)_38%,_rgba(245,241,234,0.95)_100%)]" />
+        <div className="absolute inset-0 bg-[#f5f1ea]" />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center px-6 pb-16 pt-28 lg:px-10 lg:pt-20">
-        <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid w-full items-center gap-8 lg:grid-cols-[1fr_1fr] lg:gap-8">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="max-w-xl"
+            className="relative z-20 order-2 max-w-xl lg:order-1"
           >
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-white/70 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-zinc-700 backdrop-blur-sm">
               <Gauge className="h-3.5 w-3.5 text-orange-500" />
@@ -42,7 +33,7 @@ export default function F1HeroStage() {
               The Leading AI-Building Platform That Connects
             </p>
 
-            <h1 className="text-5xl font-black uppercase leading-[0.92] tracking-[-0.06em] text-zinc-900 sm:text-6xl lg:text-[7rem]">
+            <h1 className="text-5xl font-black uppercase leading-[0.92] tracking-[-0.06em] text-zinc-900 sm:text-6xl lg:text-[5.8rem] xl:text-[6.5rem]">
               LOGIC THAT <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-500">
                 DRIVES <br />
@@ -72,41 +63,24 @@ export default function F1HeroStage() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="relative min-h-[420px] w-full"
+            className="relative z-10 order-1 min-h-[clamp(380px,72vw,680px)] w-full lg:order-2 lg:min-h-[680px]"
           >
-            <div className="absolute inset-0 rounded-[2rem] border border-zinc-300/70 bg-white/20 backdrop-blur-[2px]" />
-            <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                className="h-full min-h-full w-full scale-110 object-cover object-center opacity-95 grayscale contrast-[1.1] brightness-[0.72]"
-              >
-                <source src="/hero-video.mp4" type="video/mp4" />
-              </video>
-            </div>
-
-            <div className="absolute inset-4 rounded-[1.5rem] border border-zinc-300/70 bg-white/10" />
-
-            <div className="absolute -top-8 left-5 right-5 z-20 rounded-full border border-zinc-300/70 bg-white/75 px-4 py-2 text-center text-sm font-medium text-zinc-700 backdrop-blur-md shadow-[0_12px_24px_rgba(15,23,42,0.08)]">
-              AI • Data Solutions • Software Development
-            </div>
-
-            <div className="absolute left-8 top-28 flex items-center gap-2 rounded-xl border border-zinc-300/70 bg-white/60 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-700 backdrop-blur-md">
-              <Zap className="h-3.5 w-3.5 text-orange-500" />
-              latency: 0.8ms
-            </div>
-
-            <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-zinc-300/70 bg-white/60 px-4 py-3 backdrop-blur-md">
-              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-zinc-600">
-                <span>Live Network</span>
-                <span>94.2%</span>
-              </div>
-              <div className="mt-3 h-2 rounded-full bg-zinc-200/80">
-                <div className="h-full w-[74%] rounded-full bg-gradient-to-r from-sky-500 via-indigo-500 to-zinc-800" />
-              </div>
+            <div className="absolute inset-0 z-0 overflow-hidden bg-[#f5f1ea]">
+              <Image
+                src="/car.jpg?v=2"
+                alt="Formula 1 car viewed from above"
+                fill
+                priority
+                unoptimized
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="z-0 object-contain object-right"
+                style={{
+                  opacity: 1,
+                  filter: "none",
+                  maskImage: "linear-gradient(to right, transparent 0%, black 30%, black 100%)",
+                  WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 30%, black 100%)",
+                }}
+              />
             </div>
           </motion.div>
         </div>

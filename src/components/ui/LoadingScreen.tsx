@@ -53,6 +53,7 @@ export default function LoadingScreen() {
                   height={96}
                   priority
                   className="h-auto w-20 object-contain sm:w-24"
+                  style={{ height: "auto" }}
                 />
               </motion.div>
             </motion.div>

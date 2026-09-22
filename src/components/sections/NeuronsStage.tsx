@@ -157,9 +157,9 @@ export default function NeuronsStage() {
             </form>
           )}
 
-          <div className="mt-8 pt-6 border-t border-[#e8dccd] flex items-center justify-center gap-4 text-xs font-mono text-zinc-500">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-t border-[#e8dccd] pt-6 text-center text-xs font-mono text-zinc-500 sm:gap-4">
             <Mail className="w-4 h-4 text-[#8d5d3d]" />
-            <span>f7logicbd@gmail.com</span>
+            <span className="break-all">f7logicbd@gmail.com</span>
             <span>•</span>
             <PhoneCall className="w-4 h-4 text-[#b77c4f]" />
             <span>Response Time: &lt; 24h</span>

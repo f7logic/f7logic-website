@@ -139,7 +139,7 @@ export default async function AdminPage({
   return (
     <main className="min-h-screen bg-[#050b12] px-6 py-24 text-white">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 flex items-center justify-between gap-4">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-sky-300">Admin Portal</p>
             <h1 className="mt-3 text-4xl font-black">F7 Logic Careers</h1>

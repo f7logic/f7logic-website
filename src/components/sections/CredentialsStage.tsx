@@ -92,7 +92,7 @@ export default function CredentialsStage({ certifications = [] }: { certificatio
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.55 }}
-                className="flex items-center gap-5 border border-[#e4d7c7] bg-[#fbf8f3] p-4"
+                className="flex flex-col items-start gap-4 border border-[#e4d7c7] bg-[#fbf8f3] p-4 sm:flex-row sm:items-center sm:gap-5"
               >
                 <div className="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden border border-dashed border-orange-400/70 bg-orange-50 text-orange-700" aria-label={`Portrait placeholder for ${leader.name}`}>
                   {leader.photo ? (
@@ -101,7 +101,7 @@ export default function CredentialsStage({ certifications = [] }: { certificatio
                     <UserRound className="h-8 w-8" />
                   )}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h4 className="text-lg font-bold text-zinc-950">{leader.name}</h4>
                   <p className="mt-1 text-sm text-orange-800">{leader.designation}</p>
                   {!leader.photo ? <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">Portrait to be added</p> : null}

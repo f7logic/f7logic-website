@@ -76,7 +76,7 @@ export default function DenseNeurons() {
 
     const cx = width / 2;
     const cy = height / 2;
-    const maxCoreRadius = 220 * dpr;
+    const maxCoreRadius = Math.min(220 * dpr, width * 0.42, height * 0.35);
 
     for (let i = 0; i < nodeCount; i++) {
       const r = Math.sqrt(Math.random()) * maxCoreRadius;
@@ -246,7 +246,7 @@ export default function DenseNeurons() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-[820px] h-[620px] mx-auto flex items-center justify-center">
+    <div className="relative mx-auto flex h-[clamp(320px,72vw,620px)] w-full max-w-[820px] items-center justify-center">
       <canvas ref={canvasRef} className="w-full h-full cursor-crosshair" />
     </div>
   );
