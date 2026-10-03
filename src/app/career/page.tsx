@@ -1,49 +1,64 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import PageHeader from "@/components/ui/PageHeader";
 import { getJobs } from "@/lib/career-data";
+
+export const metadata: Metadata = {
+  title: "Careers",
+  description: "Join F7 Logic and build AI systems, software products and high-impact digital experiences.",
+};
 
 export default async function CareerPage() {
   const jobs = await getJobs();
 
   return (
-    <main className="min-h-screen bg-[#f5f1ea] text-zinc-900">
-      <div className="mx-auto max-w-6xl px-6 py-20">
-        <div className="mb-12 text-center">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.35em] text-zinc-600">
-            Career Opportunities
-          </p>
-          <h1 className="text-4xl font-black tracking-tight text-zinc-950 sm:text-6xl">Build with F7 Logic</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-zinc-700">
-            Join a team building AI systems, software products, and high-impact digital experiences for ambitious businesses.
-          </p>
-        </div>
+    <>
+      <PageHeader
+        title="Build with F7 Logic."
+        intro="Join a team building AI systems, software products and high-impact digital experiences for ambitious businesses."
+      />
 
-        <div className="grid gap-6">
-          {jobs.map((job) => (
-            <Link
-              key={job.id}
-              href={`/career/${job.slug}`}
-              className="group rounded-3xl border border-zinc-200 bg-white/75 p-6 shadow-[0_12px_24px_rgba(15,23,42,0.06)] transition hover:border-orange-300 hover:bg-white"
-            >
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-zinc-600">{job.department}</p>
-                  <h2 className="mt-2 text-2xl font-bold text-zinc-950">{job.title}</h2>
-                  <p className="mt-2 text-sm text-zinc-700">{job.location}</p>
-                </div>
-
-                <div className="flex flex-col items-start md:items-end">
-                  <span className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-700">
-                    Deadline: {new Date(job.deadline).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
-                  </span>
-                  <span className="mt-3 text-sm font-semibold text-zinc-900 group-hover:text-orange-600">
-                    View role →
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </main>
+      <section className="mx-auto max-w-7xl px-6 pb-24 lg:px-10 lg:pb-32">
+        {jobs.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-line px-6 py-10 text-center text-sm text-ink-faint">
+            There are no open roles right now. Check back soon.
+          </p>
+        ) : (
+          <ul className="border-b border-line">
+            {jobs.map((job) => (
+              <li key={job.id}>
+                <Link
+                  href={`/career/${job.slug}`}
+                  className="group grid gap-4 border-t border-line px-1 py-7 transition-colors hover:bg-surface md:grid-cols-[1fr_auto] md:items-center md:px-4"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-ink-faint">
+                      {job.department} · {job.location}
+                    </p>
+                    <h2 className="mt-1 font-display text-2xl font-semibold tracking-[-0.02em]">{job.title}</h2>
+                    <p className="mt-2 max-w-2xl text-[15px] leading-7 text-ink-soft">{job.summary}</p>
+                  </div>
+                  <div className="flex items-center gap-5 md:flex-col md:items-end md:gap-3">
+                    <span className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-soft">
+                      Apply by{" "}
+                      {new Date(job.deadline).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:text-accent-deep">
+                      View role
+                      <ArrowUpRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </>
   );
 }

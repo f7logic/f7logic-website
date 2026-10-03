@@ -1,95 +1,83 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { ArrowDownRight, BrainCircuit, CheckCircle2, Compass, Target } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const principles = [
-  "AI-first thinking",
-  "Engineering excellence",
-  "Data-driven decisions",
-  "Built for scale",
+  {
+    title: "AI-first thinking",
+    text: "We start by asking where intelligence changes the outcome, not where it is fashionable.",
+  },
+  {
+    title: "Engineering excellence",
+    text: "Typed, tested and observable systems that your own team can take over.",
+  },
+  {
+    title: "Data-driven decisions",
+    text: "Every model and feature is measured against a number that matters to your business.",
+  },
+  {
+    title: "Built for scale",
+    text: "Architecture that absorbs growth in users, data and cost without a rewrite.",
+  },
 ];
 
 export default function AboutStage() {
   return (
-    <section id="about" className="relative overflow-hidden bg-[#181311] px-6 py-28 text-[#f7f1e9] sm:py-36">
-      <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:48px_48px]" />
-      <div className="absolute -right-24 top-20 h-72 w-72 rounded-full border border-orange-300/20 bg-orange-400/10 blur-3xl" />
+    <section id="about">
+      <div className="mx-auto max-w-7xl px-6 pb-24 lg:px-10 lg:pb-32">
+        <div className="grid gap-10 border-t border-line pt-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <h2 className="font-display text-3xl font-semibold leading-[1.1] tracking-[-0.03em] sm:text-4xl">
+            Complex ideas, built into useful systems.
+          </h2>
+          <p className="max-w-2xl text-lg leading-8 text-ink-soft">
+            F7 Logic is a technology company delivering AI, software engineering and data solutions that help organizations build smarter, faster and more scalable digital systems.
+          </p>
+        </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.65 }}
-          className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20"
-        >
-          <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-orange-300">About F7 Logic</p>
-            <h2 className="max-w-xl text-4xl font-black uppercase leading-[0.95] tracking-[-0.04em] sm:text-6xl">
-              Complex ideas, built into useful systems.
-            </h2>
-            <p className="mt-6 max-w-lg text-base leading-8 text-[#d7c9bd]">
-              F7 Logic is a technology company delivering AI, software engineering, and data solutions that help organizations build smarter, faster, and more scalable digital systems.
+        <div className="mt-16 grid gap-10 md:grid-cols-2 md:gap-16">
+          <article className="border-t-2 border-ink pt-6">
+            <h3 className="font-display text-2xl font-semibold tracking-[-0.02em]">Our mission</h3>
+            <p className="mt-3 max-w-md text-[15px] leading-7 text-ink-soft">
+              To transform complex business challenges into intelligent, reliable and scalable technology solutions through AI, software and data.
             </p>
-            <div className="mt-8 inline-flex items-center gap-3 text-sm font-bold text-orange-200">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-300/30 bg-orange-300/10">
-                <ArrowDownRight className="h-4 w-4" />
-              </span>
-              From strategy to production
-            </div>
+          </article>
+          <article className="border-t-2 border-ink pt-6">
+            <h3 className="font-display text-2xl font-semibold tracking-[-0.02em]">Our vision</h3>
+            <p className="mt-3 max-w-md text-[15px] leading-7 text-ink-soft">
+              To become a globally trusted technology partner, empowering organizations with intelligent systems that create lasting business value.
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div className="bg-paper-deep">
+        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+          <h2 className="font-display text-3xl font-semibold leading-[1.1] tracking-[-0.03em] sm:text-4xl">
+            How we work
+          </h2>
+          <ul className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {principles.map((principle) => (
+              <li key={principle.title} className="border-t border-ink/25 pt-5">
+                <h3 className="font-display text-xl font-semibold tracking-[-0.02em]">{principle.title}</h3>
+                <p className="mt-3 text-[15px] leading-7 text-ink-soft">{principle.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-[2rem] bg-night p-8 text-white sm:flex-row sm:items-center sm:p-12">
+          <div>
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.03em]">Have a project in mind?</h2>
+            <p className="mt-3 max-w-md text-[15px] leading-7 text-white/70">
+              Tell us about it. We reply within 24 hours.
+            </p>
           </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <motion.article
-              id="process"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1, duration: 0.55 }}
-              className="border-t border-orange-200/30 pt-5"
-            >
-              <Target className="mb-5 h-6 w-6 text-orange-300" />
-              <h3 className="text-2xl font-bold">Our Mission</h3>
-              <p className="mt-3 text-sm leading-7 text-[#c9bbb0]">
-                To transform complex business challenges into intelligent, reliable, and scalable technology solutions through AI, software, and data.
-              </p>
-            </motion.article>
-
-            <motion.article
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.18, duration: 0.55 }}
-              className="border-t border-orange-200/30 pt-5"
-            >
-              <Compass className="mb-5 h-6 w-6 text-sky-300" />
-              <h3 className="text-2xl font-bold">Our Vision</h3>
-              <p className="mt-3 text-sm leading-7 text-[#c9bbb0]">
-                To become a globally trusted technology partner, empowering organizations with intelligent systems that create lasting business value.
-              </p>
-            </motion.article>
-
-            <motion.article
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.26, duration: 0.55 }}
-              className="border-t border-orange-200/30 pt-5 sm:col-span-2"
-            >
-              <BrainCircuit className="mb-5 h-6 w-6 text-emerald-300" />
-              <h3 className="text-2xl font-bold">How We Work</h3>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {principles.map((principle) => (
-                  <div key={principle} className="flex items-center gap-2 text-sm text-[#d7c9bd]">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />
-                    {principle}
-                  </div>
-                ))}
-              </div>
-            </motion.article>
-          </div>
-        </motion.div>
+          <Link href="/#contact" className="btn btn-accent shrink-0">
+            Start a project
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
     </section>
   );

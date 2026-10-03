@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { getJobBySlug, submitApplication } from "@/lib/career-data";
 
 export default async function JobApplyPage({
@@ -54,65 +55,70 @@ export default async function JobApplyPage({
   }
 
   return (
-    <main className="min-h-screen bg-[#f5f1ea] text-zinc-900">
-      <div className="mx-auto max-w-3xl px-6 py-20">
-        <Link href={`/career/${job.slug}`} className="mb-8 inline-flex text-sm text-zinc-700 hover:text-zinc-900">
-          ← Back to role details
-        </Link>
+    <div className="mx-auto max-w-3xl px-6 pb-24 pt-32 lg:pt-40">
+      <Link href={`/career/${job.slug}`} className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-ink-soft hover:text-ink">
+        <ArrowLeft className="h-4 w-4" />
+        Back to role details
+      </Link>
 
-        <div className="rounded-[2rem] border border-zinc-200 bg-white/80 p-8 shadow-[0_18px_42px_rgba(15,23,42,0.08)]">
-          <p className="mb-3 text-xs uppercase tracking-[0.25em] text-zinc-600">Apply for role</p>
-          <h1 className="text-3xl font-black text-zinc-950 sm:text-4xl">{job.title}</h1>
+      <div className="rounded-[2rem] border border-line bg-surface p-6 shadow-[0_30px_70px_-45px_rgba(21,23,29,0.45)] sm:p-10">
+        <p className="text-sm font-medium text-ink-faint">Apply for</p>
+        <h1 className="mt-1 font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">{job.title}</h1>
 
-          {query.error === "missing-resume" && (
-            <p className="mt-5 rounded-xl border border-amber-500/40 bg-amber-50 p-3 text-sm text-amber-700">
-              Please select your CV or resume before submitting.
-            </p>
-          )}
+        {query.error === "missing-resume" && (
+          <p role="alert" className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+            Please select your CV or resume before submitting.
+          </p>
+        )}
 
-          {query.error === "invalid-resume" && (
-            <p className="mt-5 rounded-xl border border-rose-500/40 bg-rose-50 p-3 text-sm text-rose-700">
-              Upload a PDF, DOC, or DOCX file up to 5 MB.
-            </p>
-          )}
+        {query.error === "invalid-resume" && (
+          <p role="alert" className="mt-6 rounded-xl border border-rose-300 bg-rose-50 p-3 text-sm text-rose-800">
+            Upload a PDF, DOC, or DOCX file up to 5 MB.
+          </p>
+        )}
 
-          <form action={handleSubmit} className="mt-8 space-y-5">
-            <div className="grid gap-5 sm:grid-cols-2">
-              <label className="space-y-2 text-sm text-zinc-700">
-                <span>Name</span>
-                <input name="name" required className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 outline-none ring-0 transition focus:border-orange-400" />
-              </label>
-
-              <label className="space-y-2 text-sm text-zinc-700">
-                <span>Email</span>
-                <input type="email" name="email" required className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 outline-none ring-0 transition focus:border-orange-400" />
-              </label>
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              <label className="space-y-2 text-sm text-zinc-700">
-                <span>Phone number</span>
-                <input name="phone" required className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 outline-none ring-0 transition focus:border-orange-400" />
-              </label>
-
-              <label className="space-y-2 text-sm text-zinc-700">
-                <span>Address</span>
-                <input name="address" required className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 outline-none ring-0 transition focus:border-orange-400" />
-              </label>
-            </div>
-
-            <label className="block space-y-2 text-sm text-zinc-700">
-              <span>CV / Resume</span>
-              <input type="file" name="resume" required accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-700 file:mr-4 file:rounded-full file:border-0 file:bg-zinc-900 file:px-4 file:py-2 file:font-semibold file:text-white hover:file:bg-zinc-700" />
-              <span className="block text-xs text-zinc-500">PDF, DOC, or DOCX up to 5 MB. You can choose a file from your computer or a synced Drive folder.</span>
+        <form action={handleSubmit} className="mt-8 space-y-5">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="block text-sm font-medium">
+              Name
+              <input name="name" required autoComplete="name" className="field mt-2" />
             </label>
+            <label className="block text-sm font-medium">
+              Email
+              <input type="email" name="email" required autoComplete="email" className="field mt-2" />
+            </label>
+          </div>
 
-            <button type="submit" className="w-full rounded-full bg-zinc-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-zinc-700">
-              Submit Application
-            </button>
-          </form>
-        </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="block text-sm font-medium">
+              Phone number
+              <input name="phone" required autoComplete="tel" className="field mt-2" />
+            </label>
+            <label className="block text-sm font-medium">
+              Address
+              <input name="address" required autoComplete="street-address" className="field mt-2" />
+            </label>
+          </div>
+
+          <label className="block text-sm font-medium">
+            CV / Resume
+            <input
+              type="file"
+              name="resume"
+              required
+              accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              className="field mt-2 text-sm file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-accent"
+            />
+            <span className="mt-2 block text-xs font-normal text-ink-faint">
+              PDF, DOC or DOCX, up to 5 MB.
+            </span>
+          </label>
+
+          <button type="submit" className="btn btn-primary w-full py-4">
+            Submit application
+          </button>
+        </form>
       </div>
-    </main>
+    </div>
   );
 }

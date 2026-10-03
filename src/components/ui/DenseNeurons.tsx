@@ -2,7 +2,31 @@
 
 import { useEffect, useRef } from "react";
 
-export default function DenseNeurons() {
+type Node = {
+  x: number;
+  y: number;
+  angle: number;
+  speed: number;
+  distFromCenter: number;
+  radius: number;
+  color: string;
+};
+
+type Pulse = {
+  from: number;
+  to: number;
+  prog: number;
+  speed: number;
+  color: string;
+};
+
+const NODE_COLORS = ["#2b5cff", "#4f6bff", "#0ea5e9", "#6366f1", "#3b82f6", "#0891b2"];
+
+export default function DenseNeurons({
+  className = "relative mx-auto flex h-[clamp(320px,72vw,620px)] w-full max-w-[820px] items-center justify-center",
+}: {
+  className?: string;
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -11,27 +35,20 @@ export default function DenseNeurons() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animId: number;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let width = (canvas.width = canvas.offsetWidth * dpr);
     let height = (canvas.height = canvas.offsetHeight * dpr);
+    let animId = 0;
+    let visible = true;
 
-    const mouse = {
-      x: width / 2,
-      y: height / 2,
-      targetX: width / 2,
-      targetY: height / 2,
-      active: false,
-    };
+    const mouse = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2, active: false };
 
     const handleResize = () => {
-      if (!canvas) return;
       width = canvas.width = canvas.offsetWidth * dpr;
       height = canvas.height = canvas.offsetHeight * dpr;
-      mouse.x = width / 2;
-      mouse.y = height / 2;
-      mouse.targetX = width / 2;
-      mouse.targetY = height / 2;
+      mouse.x = mouse.targetX = width / 2;
+      mouse.y = mouse.targetY = height / 2;
     };
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -51,57 +68,23 @@ export default function DenseNeurons() {
     canvas.addEventListener("pointermove", handlePointerMove);
     canvas.addEventListener("pointerleave", handlePointerLeave);
 
-    // 🧠 DEEP SPACE SCI-FI NEURAL CORE
-    const nodeCount = 160;
-    const nodes: {
-      x: number;
-      y: number;
-      baseX: number;
-      baseY: number;
-      angle: number;
-      speed: number;
-      distFromCenter: number;
-      radius: number;
-      color: string;
-    }[] = [];
-
-    const colors = [
-      "#67e8f9",
-      "#60a5fa",
-      "#93c5fd",
-      "#a78bfa",
-      "#c4b5fd",
-      "#38bdf8",
-    ];
-
-    const cx = width / 2;
-    const cy = height / 2;
-    const maxCoreRadius = Math.min(220 * dpr, width * 0.42, height * 0.35);
+    const nodeCount = 150;
+    const maxCoreRadius = Math.min(230 * dpr, width * 0.44, height * 0.38);
+    const nodes: Node[] = [];
 
     for (let i = 0; i < nodeCount; i++) {
-      const r = Math.sqrt(Math.random()) * maxCoreRadius;
-      const theta = Math.random() * Math.PI * 2;
-
       nodes.push({
-        x: cx + Math.cos(theta) * r,
-        y: cy + Math.sin(theta) * r,
-        baseX: cx + Math.cos(theta) * r,
-        baseY: cy + Math.sin(theta) * r,
+        x: width / 2,
+        y: height / 2,
         angle: Math.random() * Math.PI * 2,
-        speed: (Math.random() * 0.015 + 0.005) * (Math.random() > 0.5 ? 1 : -1),
-        distFromCenter: r,
-        radius: (Math.random() * 2.8 + 1.6) * dpr,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: (Math.random() * 0.012 + 0.004) * (Math.random() > 0.5 ? 1 : -1),
+        distFromCenter: Math.sqrt(Math.random()) * maxCoreRadius,
+        radius: (Math.random() * 2.2 + 1.4) * dpr,
+        color: NODE_COLORS[Math.floor(Math.random() * NODE_COLORS.length)],
       });
     }
 
-    const pulses: {
-      from: number;
-      to: number;
-      prog: number;
-      speed: number;
-      color: string;
-    }[] = [];
+    const pulses: Pulse[] = [];
 
     const firePulse = () => {
       const from = Math.floor(Math.random() * nodes.length);
@@ -111,99 +94,53 @@ export default function DenseNeurons() {
         from,
         to,
         prog: 0,
-        speed: Math.random() * 0.045 + 0.025,
-        color: Math.random() > 0.4 ? "#67e8f9" : "#8b5cf6",
+        speed: Math.random() * 0.04 + 0.02,
+        color: Math.random() > 0.4 ? "#2b5cff" : "#0ea5e9",
       });
     };
 
     let tick = 0;
 
     const render = () => {
-      tick++;
-      if (tick % 4 === 0 && pulses.length < 50) {
-        firePulse();
+      if (!visible) {
+        animId = 0;
+        return;
       }
+
+      tick++;
+      if (tick % 5 === 0 && pulses.length < 40) firePulse();
 
       ctx.clearRect(0, 0, width, height);
 
-      const center_x = width / 2;
-      const center_y = height / 2;
+      const cx = width / 2;
+      const cy = height / 2;
 
       mouse.x += (mouse.targetX - mouse.x) * 0.12;
       mouse.y += (mouse.targetY - mouse.y) * 0.12;
 
-      const centerGlow = ctx.createRadialGradient(center_x, center_y, 20, center_x, center_y, maxCoreRadius * 1.9);
-      centerGlow.addColorStop(0, "rgba(125, 211, 252, 0.20)");
-      centerGlow.addColorStop(0.35, "rgba(96, 165, 250, 0.14)");
-      centerGlow.addColorStop(0.7, "rgba(167, 139, 250, 0.10)");
-      centerGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-      ctx.fillStyle = centerGlow;
+      const glow = ctx.createRadialGradient(cx, cy, 20, cx, cy, maxCoreRadius * 1.9);
+      glow.addColorStop(0, "rgba(43, 92, 255, 0.10)");
+      glow.addColorStop(0.45, "rgba(43, 92, 255, 0.05)");
+      glow.addColorStop(1, "rgba(43, 92, 255, 0)");
+      ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(center_x, center_y, maxCoreRadius * 1.9, 0, Math.PI * 2);
+      ctx.arc(cx, cy, maxCoreRadius * 1.9, 0, Math.PI * 2);
       ctx.fill();
 
-      const connectDist = 90 * dpr;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < connectDist) {
-            const alpha = (1 - dist / connectDist) * 0.45;
-            ctx.strokeStyle = `rgba(79, 70, 229, ${alpha})`;
-            ctx.lineWidth = (1 - dist / connectDist) * 1.6 * dpr;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      for (let p = pulses.length - 1; p >= 0; p--) {
-        const pulse = pulses[p];
-        pulse.prog += pulse.speed;
-
-        const n1 = nodes[pulse.from];
-        const n2 = nodes[pulse.to];
-
-        if (n1 && n2) {
-          const px = n1.x + (n2.x - n1.x) * pulse.prog;
-          const py = n1.y + (n2.y - n1.y) * pulse.prog;
-
-          ctx.fillStyle = pulse.color;
-          ctx.shadowBlur = 18 * dpr;
-          ctx.shadowColor = pulse.color;
-          ctx.beginPath();
-          ctx.arc(px, py, 4.5 * dpr, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-
-        if (pulse.prog >= 1) pulses.splice(p, 1);
-      }
-
-      nodes.forEach((n) => {
+      // Move nodes first so links and pulses use this frame's positions.
+      for (const n of nodes) {
         n.angle += n.speed;
-
-        const baseX = center_x + Math.cos(n.angle) * n.distFromCenter;
-        const baseY = center_y + Math.sin(n.angle) * (n.distFromCenter * 0.82);
-        n.baseX = baseX;
-        n.baseY = baseY;
-
-        let x = baseX;
-        let y = baseY;
+        let x = cx + Math.cos(n.angle) * n.distFromCenter;
+        let y = cy + Math.sin(n.angle) * (n.distFromCenter * 0.82);
 
         if (mouse.active) {
           const dx = mouse.x - x;
           const dy = mouse.y - y;
           const dist = Math.hypot(dx, dy) || 1;
-          const influenceRadius = 180 * dpr;
+          const influence = 180 * dpr;
 
-          if (dist < influenceRadius) {
-            const pull = (1 - dist / influenceRadius) * 0.9;
+          if (dist < influence) {
+            const pull = (1 - dist / influence) * 0.9;
             x += dx * pull * 0.55;
             y += dy * pull * 0.55;
 
@@ -217,27 +154,73 @@ export default function DenseNeurons() {
 
         n.x = x;
         n.y = y;
+      }
 
-        ctx.fillStyle = n.color + "4d";
+      const connectDist = 90 * dpr;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < connectDist) {
+            const strength = 1 - dist / connectDist;
+            ctx.strokeStyle = `rgba(43, 92, 255, ${strength * 0.32})`;
+            ctx.lineWidth = strength * 1.4 * dpr;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (let p = pulses.length - 1; p >= 0; p--) {
+        const pulse = pulses[p];
+        pulse.prog += pulse.speed;
+
+        const a = nodes[pulse.from];
+        const b = nodes[pulse.to];
+        const px = a.x + (b.x - a.x) * pulse.prog;
+        const py = a.y + (b.y - a.y) * pulse.prog;
+
+        ctx.fillStyle = pulse.color;
+        ctx.shadowBlur = 12 * dpr;
+        ctx.shadowColor = pulse.color;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, n.radius * 3.6, 0, Math.PI * 2);
+        ctx.arc(px, py, 3.6 * dpr, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        if (pulse.prog >= 1) pulses.splice(p, 1);
+      }
+
+      for (const n of nodes) {
+        ctx.fillStyle = n.color + "26";
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.radius * 3.2, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.fillStyle = n.color;
-        ctx.shadowBlur = 18 * dpr;
-        ctx.shadowColor = n.color;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, n.radius * 1.25, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, n.radius * 1.2, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
-      });
+      }
 
-      animId = requestAnimationFrame(render);
+      if (!reduceMotion) animId = requestAnimationFrame(render);
     };
+
+    // Pause drawing while the canvas is off screen.
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && animId === 0 && !reduceMotion) animId = requestAnimationFrame(render);
+    });
+    observer.observe(canvas);
 
     render();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
       canvas.removeEventListener("pointermove", handlePointerMove);
       canvas.removeEventListener("pointerleave", handlePointerLeave);
@@ -246,8 +229,8 @@ export default function DenseNeurons() {
   }, []);
 
   return (
-    <div className="relative mx-auto flex h-[clamp(320px,72vw,620px)] w-full max-w-[820px] items-center justify-center">
-      <canvas ref={canvasRef} className="w-full h-full cursor-crosshair" />
+    <div className={className}>
+      <canvas ref={canvasRef} aria-hidden="true" className="h-full w-full cursor-crosshair" />
     </div>
   );
 }
