@@ -19,6 +19,7 @@ export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     domain: topics[0],
     message: "",
   });
@@ -62,7 +63,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="border-t border-line">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20 lg:px-10 lg:py-32">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-20 sm:gap-12 sm:px-6 sm:py-24 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20 lg:px-10 lg:py-32">
         <div>
           <h2 className="font-display text-4xl font-semibold leading-[1.08] tracking-[-0.03em] sm:text-5xl">
             Tell us what you want to build
@@ -102,7 +103,7 @@ export default function ContactSection() {
           </ul>
         </div>
 
-        <div className="rounded-[2rem] border border-line bg-surface p-6 shadow-[0_30px_70px_-45px_rgba(21,23,29,0.45)] sm:p-10">
+        <div className="rounded-[1.5rem] border border-line bg-surface p-5 shadow-[0_30px_70px_-45px_rgba(21,23,29,0.45)] sm:rounded-[2rem] sm:p-10">
           <div aria-live="polite">
             {status === "success" ? (
               <div className="py-10 text-center">
@@ -132,7 +133,7 @@ export default function ContactSection() {
 
           {status !== "success" && status !== "error" && (
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-5 md:grid-cols-2">
                 <label className="block text-sm font-medium">
                   Your name
                   <input
@@ -152,6 +153,18 @@ export default function ContactSection() {
                     autoComplete="email"
                     value={formData.email}
                     onChange={update("email")}
+                    className="field mt-2"
+                  />
+                </label>
+                <label className="block text-sm font-medium">
+                  Mobile number
+                  <input
+                    type="tel"
+                    required
+                    autoComplete="tel"
+                    inputMode="tel"
+                    value={formData.phone}
+                    onChange={update("phone")}
                     className="field mt-2"
                   />
                 </label>

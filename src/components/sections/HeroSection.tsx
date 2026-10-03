@@ -13,7 +13,7 @@ export default function HeroSection() {
             id="hero-title"
             className="font-display text-[clamp(2.6rem,6.2vw,5.2rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-ink"
           >
-            Software and AI, built to run in production.
+            Logic that drives innovation
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-ink-soft">
             F7 Logic designs and ships computer vision, language-model, data and custom software systems for teams that need them to work from day one.
